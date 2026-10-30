@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="232" height="40" viewBox="0 0 232 40">
+  <rect x="0" y="2" width="36" height="36" rx="9" fill="#E0A21B"/>
+  <path d="M7 19 H29 A11 11 0 0 1 7 19 Z" fill="#173F2B"/>
+  <path d="M13 15 C11 12 15 10 13 7 M18 15 C16 12 20 10 18 7 M23 15 C21 12 25 10 23 7" stroke="#173F2B" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <text x="46" y="26" font-family="Plus Jakarta Sans, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#F1F6F2">Smart Food Delivery</text>
+</svg>

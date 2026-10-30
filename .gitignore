@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+data/
+.idea/
+__pycache__/
+.pytest_cache/
+*.db
+cloudflared
+*.log
+.DS_Store
+.venv/

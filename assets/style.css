@@ -1,0 +1,14 @@
+/* Sedikit CSS di atas tema .streamlit/config.toml. */
+
+/* Jarak atas halaman bawaan Streamlit terlalu besar */
+[data-testid="stMainBlockContainer"] {
+  padding-top: 2.5rem;
+  max-width: 1320px;
+}
+
+/* Angka metric bawaan terlalu besar untuk kotak ringkasan */
+[data-testid="stMetricValue"] {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
