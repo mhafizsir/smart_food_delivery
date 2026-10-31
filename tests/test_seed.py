@@ -1,6 +1,7 @@
 """Tes data contoh: peta, restoran, menu, dan order demo."""
 from core.seed import create_service, seed_demo_data, seed_demo_orders
 from core.service import FoodDeliveryService
+from core.sorting import insertion_sort
 
 
 def demo_service(db_path=":memory:"):
@@ -88,3 +89,11 @@ def test_demo_orders_survive_reload(tmp_path):
     assert [order.customer for order in after.history] == ["Eka", "Ani", "Cici", "Gita", "Budi", "Dodi"]
     assert [order.customer for order in after.normal_queue] == ["Fajar", "Hana", "Indra"]
     assert after.next_order().customer == "Joko"
+
+
+def test_menus_sorted_by_name_ignores_case():
+    service = demo_service()
+    expected = ["Bakmi Ayam", "Croissant", "Es Teh Manis", "Kopi Susu", "Matcha Latte", "Nasi Goreng",
+                "Pangsit Goreng", "Sate Ayam", "Sate Kambing", "Soto Ayam"]
+    assert [m.name for m in service.menus_sorted_by_name()] == expected
+    assert [m.name for m in service.menus_sorted_by_name(insertion_sort)] == expected

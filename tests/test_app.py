@@ -59,3 +59,19 @@ def test_dashboard_button_fills_demo_data_and_orders():
     assert app.success[0].value == "Sukses: 14 data contoh ditambahkan. Sukses: 10 order contoh ditambahkan."
     service = app.session_state.service
     assert (len(service.restaurants), len(service.menus), len(service.orders)) == (4, 10, 10)
+
+
+def test_search_page_finds_restaurant_by_id_and_menu_by_name():
+    app = AppTest.from_string(PAGE_SCRIPT.format(module="page_search"), default_timeout=120).run()
+    by_label = {}
+    for box in app.text_input:
+        by_label[box.label] = box
+    by_label["ID restoran"].input("R1")
+    app = app.run()
+    assert app.success[0].value == "**Warung Nusantara** (R1), lokasi Blok M, kategori Indonesian. Ditemukan di bucket 7."
+    for box in app.text_input:
+        if box.label == "Nama menu yang dicari":
+            box.input("kopi susu")
+    app = app.run()
+    assert [s.value for s in app.success][-1] == "**Kopi Susu** ditemukan."
+    assert [m.value for m in app.metric if m.label in ("Binary search", "Linear search")] == ["posisi 4", "posisi 4"]

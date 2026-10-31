@@ -19,7 +19,7 @@ Database SQLite dibuat di `smart_food_delivery.db` di folder ini. Untuk memakai 
 
 | Perintah | Hasil |
 |---|---|
-| `python -m pytest` | 69 tes: 22 skenario uji, 25 tes struktur data, 9 tes data contoh, dan 13 tes halaman app |
+| `python -m pytest` | 71 tes: 22 skenario uji, 25 tes struktur data, 10 tes data contoh, dan 14 tes halaman app |
 | `python cli.py test` | Tabel testing plan (format laporan, Bagian 10 panduan) |
 | `python cli.py bench` | Tabel benchmark n = 1.000, 10.000, 100.000 |
 | `python cli.py demo` | Alur demo di database sementara, untuk disalin ke laporan |

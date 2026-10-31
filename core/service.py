@@ -222,11 +222,8 @@ class FoodDeliveryService:
     def menus_in_price_range(self, low, high):
         return self.menu_catalog.search_range(low, high)
 
-    def sorted_menu_ids(self, algorithm=merge_sort):
-        ids = []
-        for m in self.menus:
-            ids.append(m.id)
-        return algorithm(ids)
+    def menus_sorted_by_name(self, algorithm=merge_sort):
+        return algorithm(self.menus.to_list(), key=menu_name_key)
 
     # ---------- peta & rute (Team 2) ----------
 
@@ -522,3 +519,7 @@ def contains_keyword(key, values):
         if key in value.casefold():
             return True
     return False
+
+
+def menu_name_key(menu):
+    return menu.name.casefold()

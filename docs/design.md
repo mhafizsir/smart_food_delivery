@@ -54,7 +54,7 @@ Kode: `core/sorting.py`, `core/searching.py`, `core/recursion.py`.
 | Insertion sort | Ω(n), Θ(n²), O(n²) | Pembanding O(n²) di benchmark, opsi pengurutan ID menu |
 | Merge sort | Θ(n log n) semua kasus, memori O(n) | Ranking menu terlaris dan restoran teramai, urutan history saat load |
 | Linear search | Ω(1), Θ(n), O(n) | Pencarian kata kunci UTS, pembanding |
-| Binary search | Ω(1), Θ(log n), O(log n), data wajib terurut | Mencari ID menu pada daftar ID yang sudah diurutkan |
+| Binary search | Ω(1), Θ(log n), O(log n), data wajib terurut | Mencari nama menu pada daftar menu yang sudah diurutkan berdasarkan nama |
 
 **Desain recursion** (Bagian 9 panduan):
 | Fungsi | Base case | Recursive case | Input | Output | Kompleksitas |
@@ -82,7 +82,7 @@ Kode: `core/service.py`, `core/seed.py`.
 | Fitur | Method | Struktur data | Tim |
 |---|---|---|---|
 | Registrasi restoran, kelola menu | `add_restaurant`, `delete_restaurant`, `add_menu`, `update_menu`, `delete_menu` | Dynamic Array + Hash Table + BST, ID duplikat ditolak | Team 1 |
-| Pencarian restoran/menu | `search_keyword` (UTS), `find_restaurant`/`find_menu` (Hash Table), `menus_in_price_range` (BST), `sorted_menu_ids` + `binary_search` | | Team 1 |
+| Pencarian restoran/menu | `search_keyword` (UTS), `find_restaurant`/`find_menu` (Hash Table), `menus_in_price_range` (BST), `menus_sorted_by_name` + `binary_search` (cari nama menu) | | Team 1 |
 | Load dari database | `load` | semua struktur dibangun ulang | Team 1 |
 | Buat order | `create_order` | Linked List, Queue/Heap, rute Dijkstra | Team 2 |
 | Batal order | `cancel_order` | Queue/Heap, Stack history | Team 2 |
