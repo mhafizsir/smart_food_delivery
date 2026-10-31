@@ -10,7 +10,7 @@ from ui.page_search import bucket_frame
 def slot_frame(array, describe):
     rows = []
     for i in range(min(array.capacity, SLOT_LIMIT)):
-        item = array._data[i]
+        item = array.slot(i)
         text = "(kosong)"
         if item is not None:
             text = describe(item)

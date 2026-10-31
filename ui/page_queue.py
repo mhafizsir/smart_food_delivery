@@ -20,7 +20,7 @@ def streak_panel(service):
     limit = PRIORITY_STREAK_LIMIT
     q1, q2 = st.columns([1, 3])
     q1.metric("Kuota prioritas berturut-turut", f"{min(service.priority_streak, limit)} / {limit}")
-    if service._normal_turn():
+    if service.is_normal_turn():
         q2.warning(f"Sudah {service.priority_streak} order URGENT/HIGH berturut-turut: "
                    "giliran order NORMAL dulu supaya tidak antre terus.")
     else:

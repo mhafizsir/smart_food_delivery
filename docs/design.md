@@ -1,6 +1,6 @@
 # Desain Teknis Smart Food Delivery (UAS Data Structure, Kelompok 2)
 
-Penjelasan struktur data, kompleksitas, dan pseudocode untuk laporan IMRAD. Nomor bagian 1 sampai 9 sama dengan notebook lama. Rujukan "Bagian N panduan" di kode menunjuk ke Panduan UAS.
+Penjelasan struktur data, kompleksitas, dan pseudocode untuk laporan IMRAD. Rujukan "Bagian N panduan" di kode menunjuk ke Panduan UAS.
 
 ## 1. Struktur Data Linear (materi UTS, disempurnakan)
 Kode: `core/linear.py`.
@@ -72,7 +72,7 @@ Kode: `core/models.py`, `core/database.py`.
 
 **Penanggung jawab**: Database Team 1 (Arif, Mitha, Sigit, Reza).
 
-`Restaurant`, `Menu`, dan `Order` adalah data. Validasi input dilakukan di batas sistem (method publik service), jadi struktur data di dalam tidak perlu memeriksa ulang. Skema SQLite sama dengan notebook UTS. Kolom baru untuk rute dan ongkir ditambahkan dengan migrasi `ALTER TABLE`, sehingga database lama tetap terbaca tanpa kehilangan data.
+`Restaurant`, `Menu`, dan `Order` adalah data. Validasi input dilakukan di batas sistem (method publik service), jadi struktur data di dalam tidak perlu memeriksa ulang. Skema SQLite sama dengan versi UTS. Kolom baru untuk rute dan ongkir ditambahkan dengan migrasi `ALTER TABLE`, sehingga database lama tetap terbaca tanpa kehilangan data.
 
 ## 6. Service: Seluruh Fitur Sistem
 Kode: `core/service.py`, `core/seed.py`.

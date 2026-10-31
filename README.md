@@ -13,7 +13,7 @@ streamlit run app.py
 
 Aplikasi terbuka di `http://localhost:8501`. Untuk membuka link publik lewat Cloudflare Quick Tunnel, jalankan `./run_tunnel.sh`. Skrip ini menjalankan Streamlit, lalu mencetak link `https://xxxx.trycloudflare.com`. Di macOS, pasang `cloudflared` dulu dengan `brew install cloudflared`. Di Linux, skrip mengunduhnya sendiri.
 
-Database SQLite dibuat di `smart_food_delivery.db` di folder ini. Untuk memakai file lain, set `SFD_DB_PATH`. Database dari notebook UTS langsung terbaca, jadi cukup salin file lama ke folder ini.
+Database SQLite dibuat di `smart_food_delivery.db` di folder ini. Untuk memakai file lain, set `SFD_DB_PATH`. Database dari project UTS langsung terbaca, jadi cukup salin file lama ke folder ini.
 
 **Di Google Colab.** Upload folder ini, lalu jalankan:
 
@@ -67,6 +67,34 @@ Halaman **Testing** dan **Benchmark** di aplikasi menampilkan hasil yang sama.
 | `run_tunnel.sh` | Streamlit dan Cloudflare Quick Tunnel | Team 2 |
 
 Paket `core` tidak meng-import Streamlit, jadi bisa dites tanpa membuka aplikasi.
+
+## Cara membaca kode
+
+Susunannya mirip MVC:
+
+| Peran | File | Isi |
+|---|---|---|
+| Model | `core/models.py`, `core/database.py` | Class `Restaurant`, `Menu`, `Order`, dan penyimpanan SQLite |
+| Struktur data | `core/linear.py`, `core/heap.py`, `core/hash_table.py`, `core/bst.py`, `core/graph.py` | Class biasa yang dipakai service untuk menyimpan data |
+| Controller | `core/service.py` | Satu class `FoodDeliveryService`. Setiap fitur adalah satu method |
+| View | `ui/page_*.py` | Satu fungsi per halaman. Hanya membaca input lalu memanggil method service |
+
+`app.py` hanya membuat satu objek service dan menyusun menu. Setiap halaman mengambil objek itu dari `st.session_state.service`.
+
+**Contoh alur: tombol "Buat Order".**
+
+1. `ui/page_create_order.py:74` memanggil `service.create_order(...)`.
+2. `core/service.py:328` memvalidasi input, mencari restoran dan menu di Hash Table, lalu membuat `Order`.
+3. `core/service.py:311` (`_enqueue`) memasukkan order NORMAL ke `LinkedQueue` (`core/linear.py:231`) dan order URGENT/HIGH ke `MinHeap` (`core/heap.py:47`).
+4. `core/database.py:70` (`save_order`) menyimpan order ke SQLite.
+
+Halaman lain mengikuti pola yang sama. Cari nama method yang dipanggil halaman itu, lalu buka method tersebut di `service.py`.
+
+**Mulai dari mana.**
+
+- Team 1: `core/hash_table.py`, `core/bst.py`, `core/searching.py`, lalu method `find_*`, `add_*`, `search_keyword`, dan `menus_in_price_range` di `service.py`.
+- Team 2: `core/heap.py`, `core/graph.py`, lalu method `create_order`, `next_order`, `process_delivery`, dan `plan_route` di `service.py`.
+- Team 3: `core/sorting.py`, `core/recursion.py`, lalu method `statistics`, `top_menus`, dan `top_restaurants` di `service.py`.
 
 ## Pembagian tugas UAS
 

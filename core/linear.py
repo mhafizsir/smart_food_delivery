@@ -27,6 +27,10 @@ class DynamicArray:
     def capacity(self):
         return self._capacity
 
+    def slot(self, index):
+        # Isi slot mentah, termasuk slot kosong (None) di atas len(). Dipakai halaman visualisasi.
+        return self._data[index]
+
     def append(self, item):
         if self._size == self._capacity:
             self._resize(2 * self._capacity)

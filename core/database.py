@@ -8,7 +8,7 @@ DB_PATH = os.environ.get("SFD_DB_PATH", str(Path(__file__).resolve().parent.pare
 
 
 class Database:
-    """Penyimpanan permanen. Skema sama dengan notebook UTS, jadi file database lama
+    """Penyimpanan permanen. Skema sama dengan versi UTS, jadi file database lama
     tetap bisa dipakai; kolom baru ditambahkan lewat migrasi tanpa menghapus data."""
 
     ORDER_COLUMNS = (("delivery_location", "TEXT"), ("distance_km", "REAL"), ("eta_min", "REAL"),

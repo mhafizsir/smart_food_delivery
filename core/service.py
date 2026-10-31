@@ -17,56 +17,6 @@ from core.recursion import recursive_group, recursive_sum
 from core.sorting import merge_sort
 
 
-def count_pending(order):
-    if order.status == "PENDING":
-        return 1
-    return 0
-
-
-def count_done(order):
-    if order.status == "DONE":
-        return 1
-    return 0
-
-
-def count_cancelled(order):
-    if order.status == "CANCELLED":
-        return 1
-    return 0
-
-
-def sales_of(order):
-    if order.status == "DONE":
-        return order.total
-    return 0
-
-
-def restaurant_of(order):
-    return order.restaurant_name
-
-
-def count_one(order):
-    return 1
-
-
-def menu_label_if_done(order):
-    # Dikelompokkan per menu + restoran, karena dua restoran bisa punya menu dengan nama sama
-    if order.status == "DONE":
-        return f"{order.menu_name} ({order.restaurant_name})"
-    return None  # order yang belum DONE tidak masuk menus_sold
-
-
-def quantity_of(order):
-    return order.qty
-
-
-def contains_keyword(key, values):
-    for value in values:
-        if key in value.casefold():
-            return True
-    return False
-
-
 class FoodDeliveryService:
     def __init__(self, db_path=DB_PATH):
         self.db = Database(db_path)
@@ -441,19 +391,19 @@ class FoodDeliveryService:
         self.db.save_order(order)
         return f"Sukses: Order #{order.id} dibatalkan."
 
-    def _normal_turn(self):
+    def is_normal_turn(self):
         if self.priority_queue.is_empty() or self.normal_queue.is_empty():
             return False
         return self.priority_streak >= PRIORITY_STREAK_LIMIT
 
     def next_order(self):
-        if self._normal_turn() or self.priority_queue.is_empty():
+        if self.is_normal_turn() or self.priority_queue.is_empty():
             return self.normal_queue.peek()
         return self.priority_queue.peek()
 
     def process_delivery(self):
         """Ambil order berikutnya: URGENT -> HIGH -> NORMAL, dengan kuota anti-starvation."""
-        if self._normal_turn() or self.priority_queue.is_empty():
+        if self.is_normal_turn() or self.priority_queue.is_empty():
             order = self.normal_queue.dequeue()
         else:
             order = self.priority_queue.pop()
@@ -533,3 +483,54 @@ class FoodDeliveryService:
         for table in ("restaurants", "menus", "orders", "locations", "roads"):
             counts[table] = self.db.count(table)
         return counts
+
+
+# Fungsi kecil untuk statistics() dan search_keyword(), dipakai sebagai parameter value/group
+def count_pending(order):
+    if order.status == "PENDING":
+        return 1
+    return 0
+
+
+def count_done(order):
+    if order.status == "DONE":
+        return 1
+    return 0
+
+
+def count_cancelled(order):
+    if order.status == "CANCELLED":
+        return 1
+    return 0
+
+
+def sales_of(order):
+    if order.status == "DONE":
+        return order.total
+    return 0
+
+
+def restaurant_of(order):
+    return order.restaurant_name
+
+
+def count_one(order):
+    return 1
+
+
+def menu_label_if_done(order):
+    # Dikelompokkan per menu + restoran, karena dua restoran bisa punya menu dengan nama sama
+    if order.status == "DONE":
+        return f"{order.menu_name} ({order.restaurant_name})"
+    return None  # order yang belum DONE tidak masuk menus_sold
+
+
+def quantity_of(order):
+    return order.qty
+
+
+def contains_keyword(key, values):
+    for value in values:
+        if key in value.casefold():
+            return True
+    return False
