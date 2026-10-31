@@ -259,7 +259,7 @@ UNDO()
 | Restoran & menu | `list` Python | `DynamicArray` buatan sendiri | Struktur inti wajib diimplementasikan sendiri (Bagian 3) |
 | Cari ID restoran/menu | Linear search O(n) | Hash Table O(1) rata-rata, ID duplikat ditolak | Fitur wajib UAS no. 1 |
 | Katalog menu | Tidak ada | BST berdasarkan harga, cari rentang | Fitur wajib UAS no. 2 |
-| Insert order di tail | O(n), menelusuri sampai ujung | O(1) dengan pointer tail | Order baru langsung ditaruh di akhir list |
+| Pointer tail di linked list | `insert_back` O(n), menelusuri sampai ujung | O(1) dengan pointer tail | `LinkedQueue` memakai `insert_back` untuk enqueue O(1) |
 | Antrean NORMAL | `list.pop(0)` O(n) | Queue berbasis node O(1) | Dequeue tidak menggeser elemen |
 | Antrean prioritas | List diurutkan ulang setiap insert, `pop(0)` saat dequeue | Min-Heap O(log n) + aturan tie-break dan anti-starvation | Fitur wajib UAS no. 3; benchmark: heap menang mulai n ≈ 10.000 |
 | Statistik rekursif | Maju satu index per panggilan, kedalaman O(n) | Divide and conquer, kedalaman O(log n) | Tetap aman untuk data besar (100.000 order hanya butuh kedalaman sekitar 17) |

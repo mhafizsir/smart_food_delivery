@@ -56,8 +56,6 @@ def page_create_order():
     qty = c2.number_input("Jumlah", min_value=1, value=1, step=1)
     priority = c1.selectbox("Prioritas", PRIORITIES, format_func=priority_label)
     destination = c2.selectbox("Lokasi antar", [NO_LOCATION] + service.map.nodes())
-    insert_at = st.radio("Posisi di linked list", ["head", "tail"], horizontal=True,
-                         help="Ada pointer tail, jadi insert di head maupun tail sama-sama O(1).")
 
     route = None
     has_destination = destination != NO_LOCATION
@@ -72,7 +70,7 @@ def page_create_order():
         if has_destination:
             delivery_location = destination
         order, error = service.create_order(customer, restaurant_id, menu_id, int(qty), priority,
-                                            delivery_location, insert_at)
+                                            delivery_location)
         if error:
             flash(error)
         else:

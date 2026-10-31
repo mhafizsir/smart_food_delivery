@@ -58,7 +58,7 @@ def page_structures():
         show_array("Array menu", service.menus, lambda m: f"{m.id} {m.name} ({rupiah(m.price)})")
 
     st.subheader("2. Singly Linked List (semua order)")
-    st.caption("Ada pointer head dan tail: insert di head atau tail O(1), search dan hapus O(n).")
+    st.caption("Order baru masuk di head, O(1). Search dan hapus O(n) karena harus menelusuri dari head.")
     show_chain(service.orders, order_node, "HEAD", "TAIL", "Belum ada order.", end_null=True)
 
     st.subheader("3. Stack (history dan undo)")

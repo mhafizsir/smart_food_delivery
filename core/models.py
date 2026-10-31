@@ -47,7 +47,6 @@ class Order:
         self.distance_km = None
         self.eta_min = None
         self.delivery_fee = 0
-        self.insert_at = "head"  # posisi masuk linked list, disimpan supaya urutan sama setelah load
 
     def __repr__(self):
         return f"Order(#{self.id}, {self.customer!r}, {self.priority}, {self.status}, Rp{self.total:,})"

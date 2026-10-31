@@ -12,7 +12,7 @@ class Database:
     tetap bisa dipakai; kolom baru ditambahkan lewat migrasi tanpa menghapus data."""
 
     ORDER_COLUMNS = (("delivery_location", "TEXT"), ("distance_km", "REAL"), ("eta_min", "REAL"),
-                     ("route", "TEXT"), ("delivery_fee", "INTEGER"), ("list_insert", "TEXT"))
+                     ("route", "TEXT"), ("delivery_fee", "INTEGER"))
 
     def __init__(self, path):
         self.conn = sqlite3.connect(path, check_same_thread=False)  # Streamlit memakai banyak thread
@@ -83,12 +83,12 @@ class Database:
             self.conn.execute("""
                 INSERT INTO orders (id, customer, restaurant_id, menu_id, qty, total, priority, status,
                     restaurant_name, menu_name, history_seq, delivery_location, distance_km, eta_min,
-                    route, delivery_fee, list_insert)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    route, delivery_fee)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(id) DO UPDATE SET status = excluded.status, history_seq = excluded.history_seq""",
                 (o.id, o.customer, o.restaurant_id, o.menu_id, o.qty, o.total, o.priority, o.status,
                  o.restaurant_name, o.menu_name, seq, o.delivery_location, o.distance_km, o.eta_min,
-                 route_text, o.delivery_fee, o.insert_at))
+                 route_text, o.delivery_fee))
 
     def delete_order(self, order_id):
         with self.conn:

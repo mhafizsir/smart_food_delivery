@@ -58,8 +58,7 @@ class FoodDeliveryService:
         finished = []
         for row in self.db.rows("""
                 SELECT id, customer, restaurant_id, menu_id, qty, total, priority, status, restaurant_name,
-                       menu_name, history_seq, delivery_location, distance_km, eta_min, route, delivery_fee,
-                       list_insert
+                       menu_name, history_seq, delivery_location, distance_km, eta_min, route, delivery_fee
                 FROM orders ORDER BY id"""):
             order = Order(*row[:10])
             seq = row[10]
@@ -71,11 +70,7 @@ class FoodDeliveryService:
             else:
                 order.route = None
             order.delivery_fee = row[15] or 0
-            order.insert_at = row[16] or "head"  # order dari database lama dianggap insert di head
-            if order.insert_at == "head":  # diputar ulang sesuai urutan ID, jadi linked list sama persis
-                self.orders.insert_front(order)
-            else:
-                self.orders.insert_back(order)
+            self.orders.insert_front(order)  # dimuat urut ID, jadi order terbaru kembali di head
             if order.status == "PENDING":
                 self._enqueue(order)
             elif seq is not None:
@@ -325,8 +320,7 @@ class FoodDeliveryService:
         key = str(customer).strip().casefold()
         return self.orders.find_all(lambda o: o.customer.casefold() == key)
 
-    def create_order(self, customer, restaurant_id, menu_id, qty, priority="NORMAL", destination=None,
-                     insert_at="head"):
+    def create_order(self, customer, restaurant_id, menu_id, qty, priority="NORMAL", destination=None):
         """Hasil: (order, None) kalau berhasil, (None, pesan) kalau gagal."""
         try:
             customer = parse_text(customer, "Nama customer")
@@ -334,8 +328,6 @@ class FoodDeliveryService:
             priority = parse_text(priority, "Prioritas").upper()
             if priority not in PRIORITY_LEVEL:
                 raise ValueError("Prioritas harus URGENT, HIGH, atau NORMAL.")
-            if insert_at not in ("head", "tail"):
-                raise ValueError("Posisi insert harus head atau tail.")
         except ValueError as error:
             return None, f"Gagal: {error}"
         restaurant = self.find_restaurant(restaurant_id)
@@ -356,7 +348,6 @@ class FoodDeliveryService:
         self.order_counter += 1
         order = Order(self.order_counter, customer, restaurant.id, menu.id, qty, menu.price * qty, priority,
                       restaurant_name=restaurant.name, menu_name=menu.name)
-        order.insert_at = insert_at
         order.total += PRIORITY_FEE[priority]
         if route:
             order.delivery_location = route["path"][-1]
@@ -365,10 +356,7 @@ class FoodDeliveryService:
             order.eta_min = route["eta_min"]
             order.delivery_fee = route["fee"]
             order.total += route["fee"]
-        if insert_at == "head":
-            self.orders.insert_front(order)
-        else:
-            self.orders.insert_back(order)
+        self.orders.insert_front(order)  # order terbaru selalu di head, O(1)
         self._enqueue(order)
         self.actions.push({"type": "CREATE_ORDER", "order": order})
         self.db.save_order(order)

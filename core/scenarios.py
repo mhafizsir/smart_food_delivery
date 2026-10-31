@@ -189,7 +189,7 @@ def _t_persistence():
     s = _demo_service()
     s.create_order("Ani", "R1", "M1", 1, "URGENT", destination="Pondok Indah")
     s.create_order("Budi", "R2", "M4", 1)
-    s.create_order("Cici", "R2", "M4", 1, insert_at="tail")
+    s.create_order("Cici", "R2", "M4", 1)
     for priority in ("URGENT", "HIGH"):
         s.create_order("Dodi", "R1", "M1", 1, priority)
     for _ in range(3):
