@@ -71,10 +71,10 @@ Susunannya mirip MVC:
 
 **Contoh alur: tombol "Buat Order".**
 
-1. `ui/page_create_order.py:74` memanggil `service.create_order(...)`.
-2. `core/service.py:328` memvalidasi input, mencari restoran dan menu di Hash Table, lalu membuat `Order`.
-3. `core/service.py:311` (`_enqueue`) memasukkan order NORMAL ke `LinkedQueue` (`core/linear.py:231`) dan order URGENT/HIGH ke `MinHeap` (`core/heap.py:47`).
-4. `core/database.py:70` (`save_order`) menyimpan order ke SQLite.
+1. `page_create_order()` di `ui/page_create_order.py` memanggil `service.create_order(...)`.
+2. `create_order()` di `core/service.py` memvalidasi input, mencari restoran dan menu di Hash Table, lalu membuat `Order`.
+3. `_enqueue()` di `core/service.py` memasukkan order NORMAL ke `LinkedQueue.enqueue()` (`core/linear.py`) dan order URGENT/HIGH ke `MinHeap.push()` (`core/heap.py`).
+4. `save_order()` di `core/database.py` menyimpan order ke SQLite.
 
 Halaman lain mengikuti pola yang sama. Cari nama method yang dipanggil halaman itu, lalu buka method tersebut di `service.py`.
 
