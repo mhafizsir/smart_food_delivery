@@ -15,23 +15,11 @@ Aplikasi terbuka di `http://localhost:8501`. Untuk membuka link publik lewat Clo
 
 Database SQLite dibuat di `smart_food_delivery.db` di folder ini. Untuk memakai file lain, set `SFD_DB_PATH`. Database dari project UTS langsung terbaca, jadi cukup salin file lama ke folder ini.
 
-**Di Google Colab.** Upload folder ini, lalu jalankan:
-
-```
-from google.colab import drive
-drive.mount("/content/drive")
-%cd /content/smart_food_delivery
-!pip install -q streamlit==1.50.0 streamlit-folium==0.25.3 folium==0.20.0
-!SFD_DB_PATH=/content/drive/MyDrive/smart_food_delivery.db bash run_tunnel.sh
-```
-
-Database disimpan di Drive supaya tidak hilang saat runtime mati. Pandas dan altair tidak dipasang ulang karena Colab sudah punya, dan memaksa versinya bisa merusak runtime.
-
 ## Tes, benchmark, dan demo
 
 | Perintah | Hasil |
 |---|---|
-| `python -m pytest` | 22 skenario uji dan render 11 halaman app |
+| `python -m pytest` | 69 tes: 22 skenario uji, 25 tes struktur data, 9 tes data contoh, dan 13 tes halaman app |
 | `python cli.py test` | Tabel testing plan (format laporan, Bagian 10 panduan) |
 | `python cli.py bench` | Tabel benchmark n = 1.000, 10.000, 100.000 |
 | `python cli.py demo` | Alur demo di database sementara, untuk disalin ke laporan |
@@ -57,12 +45,12 @@ Halaman **Testing** dan **Benchmark** di aplikasi menampilkan hasil yang sama.
 | `core/recursion.py` | Statistik rekursif | Team 3 |
 | `core/models.py` | Restaurant, Menu, Order, konstanta biaya, validasi input | |
 | `core/service.py` | `FoodDeliveryService`, seluruh fitur sistem | semua tim |
-| `core/seed.py` | Peta contoh, restoran dan menu demo, `create_service()` | Team 1, Team 2 |
+| `core/seed.py` | Peta contoh, restoran dan menu demo, 10 order demo, `create_service()` | Team 1, Team 2 |
 | `core/benchmark.py` | Benchmark | semua tim |
 | `core/scenarios.py` | Testing plan | semua tim |
 | `ui/common.py`, `ui/map_view.py`, `ui/diagrams.py` | Helper tampilan, peta folium, gambar graphviz | Team 2 |
 | `ui/page_*.py` | Satu file per halaman | lihat tabel tim |
-| `tests/` | pytest | |
+| `tests/` | pytest: `test_scenarios.py` (testing plan), `test_structures.py` (tiap struktur data), `test_seed.py` (data contoh), `test_app.py` (halaman app) | |
 | `cli.py` | Perintah terminal di atas | |
 | `run_tunnel.sh` | Streamlit dan Cloudflare Quick Tunnel | Team 2 |
 

@@ -93,7 +93,7 @@ Kode: `core/service.py`, `core/seed.py`.
 | Statistik | `statistics` | Recursion | Team 3 |
 | Ranking | `top_menus`, `top_restaurants` | Merge sort | Team 3 |
 
-Data awal (peta contoh Jakarta Selatan, restoran dan menu demo) dan `create_service()` ada di `core/seed.py`. `python cli.py demo` menjalankan alur demo pada database sementara, sehingga hasilnya bisa disalin ke laporan.
+Data awal (peta contoh Jakarta Selatan, restoran dan menu demo) dan `create_service()` ada di `core/seed.py`. Tombol **Isi data contoh** di Dashboard juga menambahkan 10 order demo dengan semua prioritas. Satu order dibatalkan dan lima diproses, sehingga dashboard, history, antrean, dan ranking langsung berisi data. Undo stack dikosongkan setelahnya, jadi order demo tidak bisa di-undo. `python cli.py demo` menjalankan alur demo pada database sementara, sehingga hasilnya bisa disalin ke laporan.
 
 ## 7. Benchmark
 Kode: `core/benchmark.py`, halaman `ui/page_benchmark.py`.
@@ -111,7 +111,7 @@ Kode: `core/scenarios.py`, `tests/`, halaman `ui/page_testing.py`.
 
 **Penanggung jawab**: semua tim, setiap tim menguji fiturnya sendiri. Skenario ini juga alat utama Team 3 (Fixing Bug): bug yang ditemukan dibuatkan skenario baru agar tidak muncul lagi.
 
-22 skenario otomatis mencakup seluruh contoh di Bagian 10 panduan (fungsional, struktur data, kasus batas, performa, refresh data), ditambah skenario tambahan untuk anti-starvation, undo batal order, biaya, sorting, ranking, hapus restoran, rehash, BFS/DFS. Skenario 15 (akses URL Cloudflare dari perangkat lain) dicek manual saat demo. Tabel yang sama tampil di halaman **Testing** aplikasi dan di `python cli.py test`. `python -m pytest` menjalankan skenario yang sama sebagai unit test.
+22 skenario otomatis mencakup seluruh contoh di Bagian 10 panduan (fungsional, struktur data, kasus batas, performa, refresh data), ditambah skenario tambahan untuk anti-starvation, undo batal order, biaya, sorting, ranking, hapus restoran, rehash, BFS/DFS. Skenario 15 (akses URL Cloudflare dari perangkat lain) dicek manual saat demo. Tabel yang sama tampil di halaman **Testing** aplikasi dan di `python cli.py test`. `python -m pytest` menjalankan skenario yang sama sebagai unit test, ditambah tes unit untuk setiap struktur data (`tests/test_structures.py`), tes data contoh (`tests/test_seed.py`), dan tes render setiap halaman (`tests/test_app.py`).
 
 ## 9. Streamlit dan Deployment Cloudflare
 Kode: `app.py`, `ui/`, `run_tunnel.sh`.

@@ -2,7 +2,7 @@
 import pandas as pd
 import streamlit as st
 
-from core.seed import seed_demo_data
+from core.seed import seed_demo_data, seed_demo_orders
 from ui.common import flash_and_rerun, page_header, rupiah
 
 
@@ -55,4 +55,4 @@ def page_dashboard():
     q[3].metric("Undo (stack)", len(service.actions))
 
     if st.button("Isi data contoh"):
-        flash_and_rerun(seed_demo_data(service))
+        flash_and_rerun(f"{seed_demo_data(service)} {seed_demo_orders(service)}")
