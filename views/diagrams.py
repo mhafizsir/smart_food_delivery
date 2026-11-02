@@ -2,8 +2,8 @@
 import pandas as pd
 import streamlit as st
 
-from core.linear import LinkedQueue
-from ui.common import CHAIN_LIMIT, PRIORITY_FILL, TREE_LIMIT, rupiah
+from core.structures.queue import LinkedQueue
+from views.common import CHAIN_LIMIT, PRIORITY_FILL, TREE_LIMIT, rupiah
 
 
 def _clean(text):

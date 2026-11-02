@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 from core.scenarios import run_test_scenarios
-from ui.common import page_header
+from views.common import page_header
 
 
 def page_testing():

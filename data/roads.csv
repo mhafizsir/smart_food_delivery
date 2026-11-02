@@ -1,0 +1,18 @@
+from,to
+Senayan,Blok M
+Senayan,Kuningan
+Senayan,Kebayoran Lama
+Blok M,Kebayoran Lama
+Blok M,Mampang
+Blok M,Cipete
+Kemang,Mampang
+Kemang,Cipete
+Kemang,Cilandak
+Cipete,Fatmawati
+Fatmawati,Cilandak
+Fatmawati,Pondok Indah
+Pondok Indah,Kebayoran Lama
+Mampang,Kuningan
+Mampang,Pancoran
+Kuningan,Tebet
+Pancoran,Tebet

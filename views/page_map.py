@@ -3,8 +3,8 @@ import pandas as pd
 import streamlit as st
 
 from core.models import LOCATION_KINDS
-from ui.common import flash_and_rerun, page_header, rupiah, show_table, warn_recursion
-from ui.map_view import path_km, show_map
+from views.common import flash_and_rerun, page_header, rupiah, show_table, warn_recursion
+from views.map_view import path_km, show_map
 
 
 def map_order_mode(service):
@@ -91,7 +91,7 @@ def page_map():
     if path:
         st.caption("Rute: " + " -> ".join(path))
     show_map(service, path, key="main_map")
-    st.caption("Merah = restoran, biru = area customer, abu-abu = persimpangan, hijau = tujuan.")
+    st.caption("Oranye = restoran, biru = area customer, abu-abu = persimpangan, hijau = tujuan.")
     map_edit_expander(service, names)
     with st.expander("Daftar jalan (edge graph)"):
         rows = []

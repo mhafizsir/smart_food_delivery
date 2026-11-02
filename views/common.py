@@ -42,6 +42,23 @@ def flash_and_rerun(message):
     st.rerun()
 
 
+def section_picker(sections, key):
+    """Pengganti st.tabs. Pilihan disimpan di session_state, jadi setelah rerun (misalnya setelah mengetik
+    di kotak pencarian) halaman tetap di bagian yang sama. st.tabs kadang kembali ke tab pertama."""
+    last = key + "_last"
+    if key not in st.session_state:
+        st.session_state[key] = sections[0]
+
+    def keep_one_selected():
+        # Mengklik bagian yang sedang aktif membuat pilihan kosong; kembalikan ke bagian terakhir
+        if st.session_state[key] is None:
+            st.session_state[key] = st.session_state.get(last, sections[0])
+        st.session_state[last] = st.session_state[key]
+
+    return st.segmented_control("Bagian", sections, key=key, on_change=keep_one_selected,
+                                label_visibility="collapsed")
+
+
 def page_header(title, subtitle):
     st.header(title)
     st.caption(subtitle)
@@ -56,11 +73,37 @@ def priority_label(priority):
     return f"{priority} (+{rupiah(fee)})" if fee else priority
 
 
+# Kolom ini berisi angka asli, supaya klik judul kolom mengurutkan sebagai angka (Rp5.000 sebelum Rp15.000).
+# Format Rupiah, km, dan menit hanya ditambahkan saat ditampilkan.
+MONEY_COLUMNS = ("Harga", "Ongkir", "Total")
+
+
+def km_text(value):
+    return f"{value:g} km"
+
+
+def minutes_text(value):
+    return f"{value:g} menit"
+
+
+UNIT_COLUMNS = {"Jarak": km_text, "ETA": minutes_text}
+
+
 def show_table(frame, empty_message):
     if frame.empty:
         st.info(empty_message)
-    else:
-        st.dataframe(frame, hide_index=True)
+        return
+    formats = {}
+    widths = {}
+    for column in frame.columns:
+        if column in MONEY_COLUMNS:
+            formats[column] = rupiah
+        elif column in UNIT_COLUMNS:
+            formats[column] = UNIT_COLUMNS[column]
+        if column in formats:
+            # Lebar kolom dihitung dari angka asli, jadi diberi lebar tetap supaya teks "Rp22.000" tidak terpotong
+            widths[column] = st.column_config.Column(width=100)
+    st.dataframe(frame.style.format(formats, na_rep="-"), hide_index=True, column_config=widths)
 
 
 def order_label(order):
@@ -70,16 +113,12 @@ def order_label(order):
 def order_table(orders):
     rows = []
     for o in orders:
-        row = {
+        rows.append({
             "ID": o.id, "Customer": o.customer, "Restoran": o.restaurant_name, "Menu": o.menu_name,
-            "Qty": o.qty, "Ongkir": rupiah(o.delivery_fee), "Total": rupiah(o.total),
+            "Qty": o.qty, "Ongkir": o.delivery_fee, "Total": o.total,
             "Prioritas": o.priority, "Status": o.status, "Lokasi antar": o.delivery_location or "-",
-            "Jarak": "-", "ETA": "-",
-        }
-        if o.distance_km is not None:
-            row["Jarak"] = f"{o.distance_km:g} km"
-            row["ETA"] = f"{o.eta_min:g} menit"
-        rows.append(row)
+            "Jarak": o.distance_km, "ETA": o.eta_min,
+        })
     return pd.DataFrame(rows)
 
 
@@ -101,5 +140,5 @@ def menu_table(service, menus, with_restaurant_name=False):
         if restaurant and with_restaurant_name:
             shown = restaurant.name
         rows.append({"ID": m.id, "Restoran": shown, "Nama": m.name, "Kategori": m.category,
-                     "Harga": rupiah(m.price), "Tersedia": m.available})
+                     "Harga": m.price, "Tersedia": m.available})
     return pd.DataFrame(rows)

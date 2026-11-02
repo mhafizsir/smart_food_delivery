@@ -4,12 +4,12 @@ Setiap skenario memakai service baru dengan database ":memory:", jadi data asli 
 import random
 import time
 
+from core.algorithms.searching import binary_search, linear_search
+from core.algorithms.sorting import insertion_sort, merge_sort
 from core.benchmark import benchmark
-from core.hash_table import HashTable
 from core.models import is_fail
-from core.searching import binary_search, linear_search
-from core.seed import SEED_LOCATIONS, create_service, seed_demo_data
-from core.sorting import insertion_sort, merge_sort
+from core.seed import create_service, read_csv, seed_demo_data
+from core.structures.hash_table import HashTable
 
 
 def _demo_service():
@@ -298,7 +298,7 @@ def _t_bfs_dfs():
     s = create_service(":memory:")
     hops = dict(s.map.bfs("Senayan"))
     fewest = s.map.bfs_path("Senayan", "Tebet")
-    all_reached = len(s.map.dfs("Senayan")) == len(SEED_LOCATIONS)
+    all_reached = len(s.map.dfs("Senayan")) == len(read_csv("locations"))
     return all_reached and hops["Tebet"] == 2 and fewest == ["Senayan", "Kuningan", "Tebet"], f"BFS Senayan -> Tebet: {fewest}"
 
 

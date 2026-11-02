@@ -2,19 +2,22 @@
 
 Semua state ada di satu objek FoodDeliveryService. Streamlit cukup menyimpan satu objek ini,
 dan tes membuat objek baru dengan database ":memory:" tanpa menyentuh data asli."""
-from core.bst import BST
+from core.algorithms.recursion import recursive_group, recursive_sum
+from core.algorithms.sorting import merge_sort
 from core.database import DB_PATH, Database
-from core.graph import Graph, haversine_km
-from core.hash_table import HashTable
-from core.heap import MinHeap
-from core.linear import DynamicArray, LinkedQueue, SinglyLinkedList, Stack
+from core.structures.bst import BST
+from core.structures.dynamic_array import DynamicArray
+from core.structures.graph import Graph, haversine_km
+from core.structures.hash_table import HashTable
+from core.structures.heap import MinHeap
+from core.structures.linked_list import SinglyLinkedList
+from core.structures.queue import LinkedQueue
+from core.structures.stack import Stack
 from core.models import (
     AVG_SPEED_KMH, DELIVERY_BASE_FEE, DELIVERY_FEE_PER_KM, LOCATION_KINDS, Menu, Order, PRIORITY_FEE,
     PRIORITY_LEVEL, PRIORITY_STREAK_LIMIT, ROAD_FACTOR, Restaurant, parse_identifier, parse_positive_int,
     parse_text, priority_key,
 )
-from core.recursion import recursive_group, recursive_sum
-from core.sorting import merge_sort
 
 
 class FoodDeliveryService:

@@ -1,0 +1,11 @@
+customer,restaurant_id,menu_id,qty,priority,destination
+Ani,R1,M1,2,NORMAL,Pondok Indah
+Budi,R2,M4,1,URGENT,Cilandak
+Cici,R3,M7,3,HIGH,Fatmawati
+Dodi,R1,M2,2,NORMAL,
+Eka,R4,M9,1,HIGH,Pondok Indah
+Fajar,R2,M6,2,NORMAL,Fatmawati
+Gita,R3,M8,1,URGENT,
+Hana,R1,M3,1,NORMAL,Cilandak
+Indra,R4,M10,4,NORMAL,
+Joko,R2,M5,2,HIGH,Cilandak

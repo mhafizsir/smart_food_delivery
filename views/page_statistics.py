@@ -2,7 +2,7 @@
 import pandas as pd
 import streamlit as st
 
-from ui.common import page_header, rupiah, show_table
+from views.common import page_header, rupiah, show_table
 
 
 def page_statistics():

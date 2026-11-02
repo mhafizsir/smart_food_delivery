@@ -1,0 +1,11 @@
+id,restaurant_id,name,category,price
+M1,R1,Nasi Goreng,Makanan,25000
+M2,R1,Es Teh Manis,Minuman,5000
+M3,R1,Soto Ayam,Makanan,22000
+M4,R2,Kopi Susu,Minuman,18000
+M5,R2,Croissant,Makanan,22000
+M6,R2,Matcha Latte,Minuman,28000
+M7,R3,Sate Ayam,Makanan,30000
+M8,R3,Sate Kambing,Makanan,45000
+M9,R4,Bakmi Ayam,Makanan,24000
+M10,R4,Pangsit Goreng,Makanan,15000

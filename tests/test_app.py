@@ -14,7 +14,7 @@ PAGES = [
 PAGE_SCRIPT = """
 import streamlit as st
 from core.seed import create_service, seed_demo_data, seed_demo_orders
-from ui.{module} import {module}
+from views.{module} import {module}
 
 if "service" not in st.session_state:
     service = create_service(":memory:")
@@ -41,8 +41,8 @@ def test_page_renders(module, title):
 EMPTY_DASHBOARD = """
 import streamlit as st
 from core.seed import create_service
-from ui.common import show_flash
-from ui.page_dashboard import page_dashboard
+from views.common import show_flash
+from views.page_dashboard import page_dashboard
 
 if "service" not in st.session_state:
     st.session_state.service = create_service(":memory:")
@@ -61,17 +61,34 @@ def test_dashboard_button_fills_demo_data_and_orders():
     assert (len(service.restaurants), len(service.menus), len(service.orders)) == (4, 10, 10)
 
 
-def test_search_page_finds_restaurant_by_id_and_menu_by_name():
+def rerun(app):
+    # Bug AppTest 1.50: nilai segmented_control mode single (string) dibaca per huruf saat rerun.
+    # Mengisinya ulang sebagai list sebelum setiap rerun menghindari ValueError tersebut.
+    for group in app.button_group:
+        if isinstance(group.value, str):
+            group.set_value([group.value])
+    return app.run()
+
+
+def open_section(app, name):
+    app.button_group[0].set_value([name])
+    return app.run()
+
+
+def type_into(app, label, text):
+    for box in app.text_input:
+        if box.label == label:
+            box.input(text)
+    return rerun(app)
+
+
+def test_search_page_finds_restaurant_by_id_and_menus_by_name_prefix():
     app = AppTest.from_string(PAGE_SCRIPT.format(module="page_search"), default_timeout=120).run()
-    by_label = {}
-    for box in app.text_input:
-        by_label[box.label] = box
-    by_label["ID restoran"].input("R1")
-    app = app.run()
+    app = open_section(app, "Cari berdasarkan ID")
+    app = type_into(app, "ID restoran", "R1")
     assert app.success[0].value == "**Warung Nusantara** (R1), lokasi Blok M, kategori Indonesian. Ditemukan di bucket 7."
-    for box in app.text_input:
-        if box.label == "Nama menu yang dicari":
-            box.input("kopi susu")
-    app = app.run()
-    assert [s.value for s in app.success][-1] == "**Kopi Susu** ditemukan."
-    assert [m.value for m in app.metric if m.label in ("Binary search", "Linear search")] == ["posisi 4", "posisi 4"]
+    app = open_section(app, "Urutkan & cari nama")
+    app = type_into(app, "Cari nama menu", "SATE")
+    assert app.success[0].value == "2 menu ditemukan: Sate Ayam, Sate Kambing."
+    app = type_into(app, "Cari nama menu", "pizza")
+    assert app.warning[0].value == 'Tidak ada menu yang namanya diawali "pizza".'

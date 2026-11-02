@@ -1,7 +1,7 @@
 """Tes data contoh: peta, restoran, menu, dan order demo."""
+from core.algorithms.sorting import insertion_sort
 from core.seed import create_service, seed_demo_data, seed_demo_orders
-from core.service import FoodDeliveryService
-from core.sorting import insertion_sort
+from core.services import FoodDeliveryService
 
 
 def demo_service(db_path=":memory:"):

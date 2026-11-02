@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 from core.seed import seed_demo_data, seed_demo_orders
-from ui.common import flash_and_rerun, page_header, rupiah
+from views.common import flash_and_rerun, page_header, rupiah
 
 
 def ranking_bars(ranking, name_label, value_label, empty_message):

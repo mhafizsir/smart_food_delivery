@@ -1,10 +1,10 @@
 """Halaman Restoran & Menu (Team 1)."""
 import streamlit as st
 
-from ui.common import flash_and_rerun, menu_table, page_header, restaurant_table, show_table
+from views.common import flash_and_rerun, menu_table, page_header, restaurant_table, section_picker, show_table
 
 
-def restaurant_tab(service, locations):
+def restaurant_section(service, locations):
     form_column, list_column = st.columns([1, 2], gap="large")
     with list_column:
         show_table(restaurant_table(service.restaurants, service.map), "Belum ada restoran.")
@@ -42,7 +42,7 @@ def delete_restaurant_panel(service):
         flash_and_rerun(service.delete_restaurant(restaurant_id))
 
 
-def menu_tab(service):
+def menu_section(service):
     restaurant_labels = {r.id: f"{r.id} - {r.name}" for r in service.restaurants}
     if not restaurant_labels:
         st.info("Tambahkan restoran dulu.")
@@ -82,7 +82,7 @@ def edit_menu_form(service):
             flash_and_rerun(service.delete_menu(menu.id))
 
 
-def keyword_tab(service):
+def keyword_section(service):
     st.caption("Pencarian UTS: linear search O(n) pada ID, nama, kategori, dan lokasi.")
     keyword = st.text_input("Cari kata kunci")
     if not keyword.strip():
@@ -97,10 +97,10 @@ def keyword_tab(service):
 def page_restaurants():
     service = st.session_state.service
     page_header("Restoran & Menu", "Daftarkan restoran dan kelola menunya.")
-    tab_restaurant, tab_menu, tab_search = st.tabs(["Restoran", "Menu", "Cari kata kunci"])
-    with tab_restaurant:
-        restaurant_tab(service, service.map.nodes())
-    with tab_menu:
-        menu_tab(service)
-    with tab_search:
-        keyword_tab(service)
+    section = section_picker(["Restoran", "Menu", "Cari kata kunci"], key="restaurant_section")
+    if section == "Restoran":
+        restaurant_section(service, service.map.nodes())
+    elif section == "Menu":
+        menu_section(service)
+    else:
+        keyword_section(service)

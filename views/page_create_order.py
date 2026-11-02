@@ -2,8 +2,8 @@
 import streamlit as st
 
 from core.models import PRIORITY_FEE
-from ui.common import NO_LOCATION, PRIORITIES, flash, page_header, priority_label, rupiah
-from ui.map_view import show_map
+from views.common import NO_LOCATION, PRIORITIES, flash, page_header, priority_label, rupiah
+from views.map_view import show_map
 
 
 def cost_breakdown(subtotal, priority, route):

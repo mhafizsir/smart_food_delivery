@@ -1,8 +1,8 @@
 """Graph peta lokasi dan rute pengiriman: Dijkstra, BFS, DFS (Team 2)."""
 import math
 
-from core.heap import MinHeap
-from core.linear import LinkedQueue
+from core.structures.heap import MinHeap
+from core.structures.queue import LinkedQueue
 
 
 def haversine_km(a, b):

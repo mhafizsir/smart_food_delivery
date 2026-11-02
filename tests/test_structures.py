@@ -1,14 +1,17 @@
 """Tes unit untuk setiap struktur data dan algoritma di core, tanpa service dan database."""
 import pytest
 
-from core.bst import BST
-from core.graph import Graph
-from core.hash_table import HashTable
-from core.heap import MinHeap
-from core.linear import DynamicArray, LinkedQueue, SinglyLinkedList, Stack
-from core.recursion import recursive_group, recursive_sum
-from core.searching import binary_search, linear_search
-from core.sorting import insertion_sort, merge_sort
+from core.algorithms.recursion import recursive_group, recursive_sum
+from core.algorithms.searching import binary_search, binary_search_first, linear_search
+from core.algorithms.sorting import insertion_sort, merge_sort
+from core.structures.bst import BST
+from core.structures.dynamic_array import DynamicArray
+from core.structures.graph import Graph
+from core.structures.hash_table import HashTable
+from core.structures.heap import MinHeap
+from core.structures.linked_list import SinglyLinkedList
+from core.structures.queue import LinkedQueue
+from core.structures.stack import Stack
 
 
 class Item:
@@ -278,3 +281,12 @@ def test_recursive_sum_and_group():
 def test_recursive_sum_handles_large_input():
     numbers = list(range(100_000))
     assert recursive_sum(numbers, lambda number: number) == 4_999_950_000
+
+
+def test_binary_search_first_finds_lower_bound():
+    names = ["bakmi", "kopi", "sate ayam", "sate kambing", "soto"]
+    assert binary_search_first(names, "sate") == 2
+    assert binary_search_first(names, "kopi") == 1
+    assert binary_search_first(names, "a") == 0
+    assert binary_search_first(names, "zzz") == 5
+    assert binary_search_first([], "kopi") == 0

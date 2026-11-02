@@ -3,8 +3,8 @@ import pandas as pd
 import streamlit as st
 
 from core.models import PRIORITY_STREAK_LIMIT
-from ui.common import PRIORITY_BADGE, flash, flash_and_rerun, order_label, page_header, rupiah, show_table
-from ui.diagrams import show_heap
+from views.common import PRIORITY_BADGE, flash, flash_and_rerun, order_label, page_header, show_table
+from views.diagrams import show_heap
 
 
 def queue_table(orders):
@@ -12,7 +12,7 @@ def queue_table(orders):
     rows = []
     for position, order in enumerate(orders, start=1):
         rows.append({"Urutan": position, "ID": order.id, "Customer": order.customer, "Menu": order.menu_name,
-                     "Qty": order.qty, "Total": rupiah(order.total)})
+                     "Qty": order.qty, "Total": order.total})
     return pd.DataFrame(rows)
 
 

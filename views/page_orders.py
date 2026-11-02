@@ -2,7 +2,7 @@
 import pandas as pd
 import streamlit as st
 
-from ui.common import flash_and_rerun, order_table, page_header, show_table
+from views.common import flash_and_rerun, order_table, page_header, section_picker, show_table
 
 
 def reload_from_db(service):
@@ -22,24 +22,23 @@ def undo_rows(service):
 def page_orders():
     service = st.session_state.service
     page_header("Riwayat & Undo", "Semua order, riwayat order selesai atau batal, dan aksi yang bisa dibatalkan.")
-    tab_all, tab_history, tab_search, tab_undo, tab_db = st.tabs(
-        ["Semua order", "History", "Cari customer", "Undo", "Database"])
-    with tab_all:
+    section = section_picker(["Semua order", "History", "Cari customer", "Undo", "Database"], key="orders_section")
+    if section == "Semua order":
         st.caption("Traversal singly linked list dari head ke tail.")
         show_table(order_table(service.orders), "Belum ada order.")
-    with tab_history:
+    elif section == "History":
         st.caption("History stack: order DONE/CANCELLED, yang terbaru di atas.")
         show_table(order_table(service.history), "Riwayat kosong.")
-    with tab_search:
+    elif section == "Cari customer":
         customer = st.text_input("Nama customer")
         if customer.strip():
             show_table(order_table(service.orders_by_customer(customer)), "Order tidak ditemukan.")
-    with tab_undo:
+    elif section == "Undo":
         st.caption("Undo stack (LIFO): aksi terakhir di atas, itu yang dibatalkan oleh tombol Undo.")
         show_table(pd.DataFrame(undo_rows(service)), "Stack undo kosong.")
         if st.button("Undo aksi terakhir", key="undo_history"):
             flash_and_rerun(service.undo())
-    with tab_db:
+    else:
         counts = service.check_db()
         cols = st.columns(len(counts))
         for col, (table, count) in zip(cols, counts.items()):

@@ -1,24 +1,24 @@
 """Smart Food Delivery & Order Management System (Kelompok 2). Jalankan: streamlit run app.py
 
-Logika ada di paket core, halaman di paket ui. File ini hanya membuat service bersama,
+Logika ada di paket core, halaman di paket views. File ini hanya membuat service bersama,
 memasang tampilan, dan menyusun menu navigasi."""
 from pathlib import Path
 
 import streamlit as st
 
 from core.seed import create_service
-from ui.common import show_flash
-from ui.page_benchmark import page_benchmark
-from ui.page_create_order import page_create_order
-from ui.page_dashboard import page_dashboard
-from ui.page_map import page_map
-from ui.page_orders import page_orders
-from ui.page_queue import page_queue
-from ui.page_restaurants import page_restaurants
-from ui.page_search import page_search
-from ui.page_statistics import page_statistics
-from ui.page_structures import page_structures
-from ui.page_testing import page_testing
+from views.common import show_flash
+from views.page_benchmark import page_benchmark
+from views.page_create_order import page_create_order
+from views.page_dashboard import page_dashboard
+from views.page_map import page_map
+from views.page_orders import page_orders
+from views.page_queue import page_queue
+from views.page_restaurants import page_restaurants
+from views.page_search import page_search
+from views.page_statistics import page_statistics
+from views.page_structures import page_structures
+from views.page_testing import page_testing
 
 ASSETS = Path(__file__).parent / "assets"
 

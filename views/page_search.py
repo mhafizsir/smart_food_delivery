@@ -2,11 +2,11 @@
 import pandas as pd
 import streamlit as st
 
-from core.searching import binary_search, linear_search
-from core.service import menu_name_key
-from core.sorting import insertion_sort, merge_sort
-from ui.common import menu_table, page_header, rupiah, show_table, warn_recursion
-from ui.diagrams import bst_dot
+from core.algorithms.searching import binary_search_first
+from core.algorithms.sorting import insertion_sort, merge_sort
+from core.services import menu_name_key
+from views.common import menu_table, page_header, rupiah, section_picker, show_table, warn_recursion
+from views.diagrams import bst_dot
 
 
 def bucket_frame(table, searched=None):
@@ -20,7 +20,7 @@ def bucket_frame(table, searched=None):
     return pd.DataFrame(rows)
 
 
-def id_tab(service):
+def id_section(service):
     st.caption("Ketik ID untuk langsung menemukan restoran atau menu. Pencarian memakai Hash Table, rata-rata O(1).")
     c1, c2 = st.columns([1, 3])
     kind = c1.radio("Jenis", ["Restoran", "Menu"], horizontal=True)
@@ -57,7 +57,7 @@ def id_tab(service):
     st.dataframe(bucket_frame(table, searched), hide_index=True)
 
 
-def catalog_tab(service):
+def catalog_section(service):
     tree = service.menu_catalog
     if not len(tree):
         st.info("Belum ada menu.")
@@ -108,42 +108,44 @@ def sorted_frame(service, menus):
     for position, m in enumerate(menus, start=1):
         restaurant = service.find_restaurant(m.restaurant_id)
         rows.append({"Posisi": position, "Nama": m.name, "Restoran": restaurant.name if restaurant else m.restaurant_id,
-                     "Harga": rupiah(m.price)})
+                     "Harga": m.price})
     return pd.DataFrame(rows)
 
 
-def name_tab(service):
-    st.caption("Urutkan menu berdasarkan nama, lalu cari satu menu dengan binary search.")
+def name_section(service):
+    st.caption("Urutkan menu berdasarkan nama, lalu cari menu dengan binary search.")
     algorithms = {"Merge sort, O(n log n)": merge_sort, "Insertion sort, O(n²)": insertion_sort}
     choice = st.radio("Algoritma pengurutan", list(algorithms), horizontal=True)
     menus = service.menus_sorted_by_name(algorithms[choice])
     show_table(sorted_frame(service, menus), "Belum ada menu.")
     st.caption("Kedua algoritma menghasilkan urutan yang sama. Bedanya ada di kecepatan, lihat halaman Benchmark.")
 
-    name = st.text_input("Nama menu yang dicari", placeholder="contoh: Kopi Susu").strip()
-    if not name:
+    text = st.text_input("Cari nama menu", placeholder="contoh: sate atau kopi").strip()
+    if not text:
         return
-    target = name.casefold()
-    sorted_index = binary_search(menus, target, key=menu_name_key)
-    original_index = linear_search(service.menus.to_list(), target, key=menu_name_key)
-    if sorted_index < 0:
-        st.warning(f"Menu \"{name}\" tidak ditemukan. Nama harus sama persis (huruf besar/kecil tidak masalah).")
+    prefix = text.casefold()
+    first = binary_search_first(menus, prefix, key=menu_name_key)
+    matches = []
+    for m in menus[first:]:
+        if not menu_name_key(m).startswith(prefix):
+            break  # daftar terurut: semua nama berawalan sama letaknya berurutan
+        matches.append(m)
+    if not matches:
+        st.warning(f"Tidak ada menu yang namanya diawali \"{text}\".")
         return
-    st.success(f"**{menus[sorted_index].name}** ditemukan.")
-    c1, c2 = st.container(border=True).columns(2)
-    c1.metric("Binary search", f"posisi {sorted_index + 1}")
-    c1.caption("Di daftar terurut di atas. O(log n): setiap langkah membuang separuh daftar.")
-    c2.metric("Linear search", f"posisi {original_index + 1}")
-    c2.caption("Di Dynamic Array, urutan menu saat didaftarkan. O(n): dicek satu per satu dari awal.")
+    names = ", ".join(m.name for m in matches)
+    st.success(f"{len(matches)} menu ditemukan: {names}.")
+    st.caption(f"Binary search langsung melompat ke posisi {first + 1} di daftar terurut, O(log n). "
+               "Karena daftarnya terurut, menu lain yang namanya diawali teks yang sama ada tepat di bawahnya.")
 
 
 def page_search():
     service = st.session_state.service
     page_header("Cari & Katalog", "Cari restoran dan menu, lihat katalog harga, dan urutkan menu.")
-    tab_id, tab_catalog, tab_name = st.tabs(["Cari berdasarkan ID", "Katalog harga", "Urutkan & cari nama"])
-    with tab_id:
-        id_tab(service)
-    with tab_catalog:
-        catalog_tab(service)
-    with tab_name:
-        name_tab(service)
+    section = section_picker(["Cari berdasarkan ID", "Katalog harga", "Urutkan & cari nama"], key="search_section")
+    if section == "Cari berdasarkan ID":
+        id_section(service)
+    elif section == "Katalog harga":
+        catalog_section(service)
+    else:
+        name_section(service)

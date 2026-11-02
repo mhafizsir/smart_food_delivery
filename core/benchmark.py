@@ -2,12 +2,12 @@
 import random
 import time
 
-from core.bst import BST
-from core.hash_table import HashTable
-from core.heap import MinHeap
-from core.linear import DynamicArray
-from core.searching import binary_search, linear_search
-from core.sorting import insertion_sort, merge_sort
+from core.algorithms.searching import binary_search, linear_search
+from core.algorithms.sorting import insertion_sort, merge_sort
+from core.structures.bst import BST
+from core.structures.dynamic_array import DynamicArray
+from core.structures.hash_table import HashTable
+from core.structures.heap import MinHeap
 
 
 BENCHMARK_SIZES = (1_000, 10_000, 100_000)

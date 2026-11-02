@@ -2,9 +2,9 @@
 import pandas as pd
 import streamlit as st
 
-from ui.common import SLOT_LIMIT, page_header, rupiah, show_table, warn_recursion
-from ui.diagrams import action_node, bst_dot, order_node, show_chain, show_heap
-from ui.page_search import bucket_frame
+from views.common import SLOT_LIMIT, page_header, rupiah, show_table, warn_recursion
+from views.diagrams import action_node, bst_dot, order_node, show_chain, show_heap
+from views.page_search import bucket_frame
 
 
 def slot_frame(array, describe):

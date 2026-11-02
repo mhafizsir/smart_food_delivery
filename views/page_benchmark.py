@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 
 from core.benchmark import benchmark
-from ui.common import page_header
+from views.common import page_header
 
 
 def point_kind(note):

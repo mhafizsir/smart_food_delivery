@@ -23,3 +23,17 @@ def binary_search(sorted_items, target, key=lambda item: item):
         else:
             high = middle - 1
     return -1
+
+
+def binary_search_first(sorted_items, target, key=lambda item: item):
+    """O(log n). Index item pertama yang key-nya >= target (lower bound). Data wajib sudah terurut.
+    Dipakai untuk mencari awalan nama: semua nama yang diawali target letaknya berurutan mulai index ini."""
+    low = 0
+    high = len(sorted_items)
+    while low < high:
+        middle = (low + high) // 2
+        if key(sorted_items[middle]) < target:
+            low = middle + 1
+        else:
+            high = middle
+    return low
