@@ -2,8 +2,29 @@
 
 Penjelasan struktur data, kompleksitas, dan pseudocode untuk laporan IMRAD. Rujukan "Bagian N panduan" di kode menunjuk ke Panduan UAS.
 
-## 1. Struktur Data Linear (materi UTS, disempurnakan)
-Kode: `core/linear.py`.
+## 1. Fitur Sistem dan Penanggung Jawab
+Kode: `core/services.py`, `core/seed.py`, data awal di `data/*.csv`.
+
+`FoodDeliveryService` menyimpan semua struktur data dalam satu objek. Streamlit cukup menyimpan objek ini, dan tes membuat objek baru dengan database `":memory:"`.
+
+| Fitur | Method | Struktur data | Tim |
+|---|---|---|---|
+| Registrasi restoran, kelola menu | `add_restaurant`, `delete_restaurant`, `add_menu`, `update_menu`, `delete_menu` | Dynamic Array + Hash Table + BST, ID duplikat ditolak | Team 1 (Arif, Mitha, Sigit, Reza) |
+| Pencarian restoran/menu | `search_keyword` (UTS), `find_restaurant`/`find_menu` (Hash Table), `menus_in_price_range` (BST), `menus_sorted_by_name` + `binary_search_first` (cari awalan nama menu) | | Team 1 (Arif, Mitha, Sigit, Reza) |
+| Load dari database | `load` | semua struktur dibangun ulang | Team 1 (Arif, Mitha, Sigit, Reza) |
+| Buat order | `create_order` | Linked List, Queue/Heap, rute Dijkstra | Team 2 (Lucky, Angelica, Alvi, Ryan) |
+| Batal order | `cancel_order` | Queue/Heap, Stack history | Team 2 (Lucky, Angelica, Alvi, Ryan) |
+| Delivery Queue dan prioritas | `next_order`, `process_delivery` | LinkedQueue + Min-Heap, anti-starvation | Team 2 (Lucky, Angelica, Alvi, Ryan) |
+| Order History | `history` | Stack | Team 2 (Lucky, Angelica, Alvi, Ryan) |
+| Undo Last Action | `undo` (buat order, batal order, proses delivery) | Stack | Team 2 (Lucky, Angelica, Alvi, Ryan) |
+| Peta dan rute | `add_location`, `add_road`, `route_between`, `plan_route`, `map.bfs_path`, `map.dfs` | Graph | Team 2 (Lucky, Angelica, Alvi, Ryan) |
+| Statistik | `statistics` | Recursion | Team 3 (Arbi, Hafiz, Gilang) |
+| Ranking | `top_menus`, `top_restaurants` | Merge sort | Team 3 (Arbi, Hafiz, Gilang) |
+
+Data awal (peta contoh Jakarta Selatan, restoran, menu, dan order demo) disimpan sebagai CSV di folder `data/` dan dibaca oleh `core/seed.py`. `create_service()` juga ada di file itu. Tombol **Isi data contoh** di Dashboard juga menambahkan 10 order demo dengan semua prioritas. Satu order dibatalkan dan lima diproses, sehingga dashboard, history, antrean, dan ranking langsung berisi data. Undo stack dikosongkan setelahnya, jadi order demo tidak bisa di-undo. `python cli.py demo` menjalankan alur demo pada database sementara, sehingga hasilnya bisa disalin ke laporan.
+
+## 2. Struktur Data Linear (materi UTS, disempurnakan)
+Kode: `core/structures/dynamic_array.py`, `linked_list.py`, `stack.py`, `queue.py`.
 
 | Struktur | Dipakai untuk | Operasi utama |
 |---|---|---|
@@ -12,8 +33,8 @@ Kode: `core/linear.py`.
 | `Stack` | History order selesai/batal (Sub 3) dan Undo (Sub 5) | `push`/`pop` O(1), LIFO |
 | `LinkedQueue` | Antrean delivery NORMAL (Sub 4) | `enqueue`/`dequeue` O(1), FIFO. Versi UTS memakai `list.pop(0)` yang O(n). |
 
-## 2. Min-Heap dan Hash Table
-Kode: `core/heap.py`, `core/hash_table.py`.
+## 3. Min-Heap dan Hash Table
+Kode: `core/structures/heap.py`, `core/structures/hash_table.py`.
 
 **Penanggung jawab**: Min-Heap (Antrean Prioritas Order) Team 2 (Lucky, Angelica, Alvi, Ryan). Hash Table (Searching) Team 1 (Arif, Mitha, Sigit, Reza).
 
@@ -29,8 +50,8 @@ Kode: `core/heap.py`, `core/hash_table.py`.
 - **Collision** ditangani dengan *separate chaining*: setiap bucket berisi list pasangan key-value.
 - **Load factor** = jumlah data / jumlah bucket. Kalau melewati 0,75, jumlah bucket digandakan dan semua key di-*rehash*, sehingga chain tetap pendek. Kalau load factor dibiarkan tinggi, chain memanjang dan pencarian turun menuju O(n).
 
-## 3. Binary Search Tree dan Graph
-Kode: `core/bst.py`, `core/graph.py`.
+## 4. Binary Search Tree dan Graph
+Kode: `core/structures/bst.py`, `core/structures/graph.py`.
 
 **Penanggung jawab**: BST (Katalog Menu) Team 1 (Arif, Mitha, Sigit, Reza). Graph (Peta Lokasi dan Rute Pengiriman) Team 2 (Lucky, Angelica, Alvi, Ryan).
 
@@ -44,8 +65,8 @@ Kode: `core/bst.py`, `core/graph.py`.
 - **BFS** (memakai `LinkedQueue`) mencari rute dengan transit paling sedikit.
 - **DFS** rekursif mencari semua lokasi yang terhubung, dipakai untuk mendeteksi lokasi yang tidak bisa dijangkau.
 
-## 4. Sorting, Searching, dan Recursion
-Kode: `core/sorting.py`, `core/searching.py`, `core/recursion.py`.
+## 5. Sorting, Searching, dan Recursion
+Kode: `core/algorithms/sorting.py`, `core/algorithms/searching.py`, `core/algorithms/recursion.py`.
 
 **Penanggung jawab**: Sorting dan statistik rekursif (Ranking & Pengurutan, Dashboard) Team 3 (Arbi, Hafiz, Gilang). Linear dan binary search (Searching) Team 1 (Arif, Mitha, Sigit, Reza).
 
@@ -54,7 +75,7 @@ Kode: `core/sorting.py`, `core/searching.py`, `core/recursion.py`.
 | Insertion sort | Ω(n), Θ(n²), O(n²) | Pembanding O(n²) di benchmark, opsi pengurutan ID menu |
 | Merge sort | Θ(n log n) semua kasus, memori O(n) | Ranking menu terlaris dan restoran teramai, urutan history saat load |
 | Linear search | Ω(1), Θ(n), O(n) | Pencarian kata kunci UTS, pembanding |
-| Binary search | Ω(1), Θ(log n), O(log n), data wajib terurut | Mencari nama menu pada daftar menu yang sudah diurutkan berdasarkan nama |
+| Binary search | Ω(1), Θ(log n), O(log n), data wajib terurut | Mencari menu berdasarkan awalan nama (versi lower bound, `binary_search_first`) pada daftar menu yang sudah diurutkan berdasarkan nama |
 
 **Desain recursion** (Bagian 9 panduan):
 | Fungsi | Base case | Recursive case | Input | Output | Kompleksitas |
@@ -67,36 +88,15 @@ Kode: `core/sorting.py`, `core/searching.py`, `core/recursion.py`.
 
 **Alasan memakai recursion**: statistik, traversal tree, DFS, dan merge sort secara alami memecah masalah menjadi submasalah yang sama bentuknya. **Batas call stack**: Python menghentikan rekursi di kedalaman sekitar 1.000 (`RecursionError`). Versi UTS menghitung statistik dengan maju satu index per panggilan, sehingga kedalamannya n dan untuk data di atas sekitar 1.000 order akan mencapai batas itu. Versi UAS membagi dua rentang setiap panggilan, jadi 100.000 order hanya butuh kedalaman sekitar 17. Traversal BST dan DFS tetap bisa melewati batas itu pada tree yang sangat miring atau graph berbentuk rantai panjang.
 
-## 5. Model Data dan Database
+## 6. Model Data dan Database
 Kode: `core/models.py`, `core/database.py`.
 
 **Penanggung jawab**: Database Team 1 (Arif, Mitha, Sigit, Reza).
 
 `Restaurant`, `Menu`, dan `Order` adalah data. Validasi input dilakukan di batas sistem (method publik service), jadi struktur data di dalam tidak perlu memeriksa ulang. Skema SQLite sama dengan versi UTS. Kolom baru untuk rute dan ongkir ditambahkan dengan migrasi `ALTER TABLE`, sehingga database lama tetap terbaca tanpa kehilangan data.
 
-## 6. Service: Seluruh Fitur Sistem
-Kode: `core/service.py`, `core/seed.py`.
-
-`FoodDeliveryService` menyimpan semua struktur data dalam satu objek. Streamlit cukup menyimpan objek ini, dan tes membuat objek baru dengan database `":memory:"`.
-
-| Fitur | Method | Struktur data | Tim |
-|---|---|---|---|
-| Registrasi restoran, kelola menu | `add_restaurant`, `delete_restaurant`, `add_menu`, `update_menu`, `delete_menu` | Dynamic Array + Hash Table + BST, ID duplikat ditolak | Team 1 |
-| Pencarian restoran/menu | `search_keyword` (UTS), `find_restaurant`/`find_menu` (Hash Table), `menus_in_price_range` (BST), `menus_sorted_by_name` + `binary_search` (cari nama menu) | | Team 1 |
-| Load dari database | `load` | semua struktur dibangun ulang | Team 1 |
-| Buat order | `create_order` | Linked List, Queue/Heap, rute Dijkstra | Team 2 |
-| Batal order | `cancel_order` | Queue/Heap, Stack history | Team 2 |
-| Delivery Queue dan prioritas | `next_order`, `process_delivery` | LinkedQueue + Min-Heap, anti-starvation | Team 2 |
-| Order History | `history` | Stack | Team 2 |
-| Undo Last Action | `undo` (buat order, batal order, proses delivery) | Stack | Team 2 |
-| Peta dan rute | `add_location`, `add_road`, `route_between`, `plan_route`, `map.bfs_path`, `map.dfs` | Graph | Team 2 |
-| Statistik | `statistics` | Recursion | Team 3 |
-| Ranking | `top_menus`, `top_restaurants` | Merge sort | Team 3 |
-
-Data awal (peta contoh Jakarta Selatan, restoran dan menu demo) dan `create_service()` ada di `core/seed.py`. Tombol **Isi data contoh** di Dashboard juga menambahkan 10 order demo dengan semua prioritas. Satu order dibatalkan dan lima diproses, sehingga dashboard, history, antrean, dan ranking langsung berisi data. Undo stack dikosongkan setelahnya, jadi order demo tidak bisa di-undo. `python cli.py demo` menjalankan alur demo pada database sementara, sehingga hasilnya bisa disalin ke laporan.
-
 ## 7. Benchmark
-Kode: `core/benchmark.py`, halaman `ui/page_benchmark.py`.
+Kode: `core/benchmark.py`, halaman `views/page_benchmark.py`.
 
 **Penanggung jawab**: semua tim.
 
@@ -107,18 +107,18 @@ Cara membaca: kalau n naik 10 kali, O(n) naik sekitar 10 kali, O(n log n) sediki
 Catatan untuk Discussion: pembanding antrean "List + sort ulang (cara UTS)" memakai `list.sort()` bawaan Python yang berjalan di C dan sangat cepat untuk list yang hampir terurut. Karena itu pada n = 1.000 cara UTS bisa lebih cepat daripada Min-Heap yang ditulis dalam Python. Konstanta C jauh lebih kecil, tetapi pertumbuhannya tetap kuadrat, jadi Min-Heap menang mulai sekitar n = 10.000 dan selisihnya terus melebar. Baris "BST (data terurut, tree miring)" menunjukkan kasus terburuk BST: tinggi tree = n, sehingga membangun katalog menjadi O(n²).
 
 ## 8. Testing Plan
-Kode: `core/scenarios.py`, `tests/`, halaman `ui/page_testing.py`.
+Kode: `core/scenarios.py`, `tests/`, halaman `views/page_testing.py`.
 
 **Penanggung jawab**: semua tim, setiap tim menguji fiturnya sendiri. Skenario ini juga alat utama Team 3 (Fixing Bug): bug yang ditemukan dibuatkan skenario baru agar tidak muncul lagi.
 
 22 skenario otomatis mencakup seluruh contoh di Bagian 10 panduan (fungsional, struktur data, kasus batas, performa, refresh data), ditambah skenario tambahan untuk anti-starvation, undo batal order, biaya, sorting, ranking, hapus restoran, rehash, BFS/DFS. Skenario 15 (akses URL Cloudflare dari perangkat lain) dicek manual saat demo. Tabel yang sama tampil di halaman **Testing** aplikasi dan di `python cli.py test`. `python -m pytest` menjalankan skenario yang sama sebagai unit test, ditambah tes unit untuk setiap struktur data (`tests/test_structures.py`), tes data contoh (`tests/test_seed.py`), dan tes render setiap halaman (`tests/test_app.py`).
 
 ## 9. Streamlit dan Deployment Cloudflare
-Kode: `app.py`, `ui/`, `run_tunnel.sh`.
+Kode: `app.py`, `views/`, `run_tunnel.sh`.
 
 **Penanggung jawab**: Streamlit dan deployment Team 2 (Lucky, Angelica, Alvi, Ryan). Halaman Dashboard dan Statistik & Ranking Team 3 (Arbi, Hafiz, Gilang). Halaman Restoran & Menu dan Cari & Katalog Team 1 (Arif, Mitha, Sigit, Reza).
 
-`app.py` hanya membuat service bersama dan memilih halaman. Setiap halaman ada di `ui/page_*.py` dan setiap tombol hanya memanggil method `FoodDeliveryService`. `run_tunnel.sh` menjalankan Streamlit di port 8501 lalu membuka **Cloudflare Quick Tunnel** (`cloudflared tunnel --url http://localhost:8501`). Link `https://xxxx.trycloudflare.com` muncul di terminal.
+`app.py` hanya membuat service bersama dan memilih halaman. Setiap halaman ada di `views/page_*.py` dan setiap tombol hanya memanggil method `FoodDeliveryService`. `run_tunnel.sh` menjalankan Streamlit di port 8501 lalu membuka **Cloudflare Quick Tunnel** (`cloudflared tunnel --url http://localhost:8501`). Link `https://xxxx.trycloudflare.com` muncul di terminal.
 
 **Kenapa service disimpan dengan `st.cache_resource` dan `st.session_state`.** Streamlit menjalankan ulang `app.py` dari atas setiap kali ada klik. Tanpa penyimpanan, semua struktur data akan dibuat ulang dan isinya hilang. `st.cache_resource` membuat satu objek service yang dipakai bersama semua pengunjung, sehingga penguji dan presenter melihat data yang sama dan ID order tidak bentrok. Objek yang sama juga disimpan di `st.session_state.service` seperti kerangka di panduan.
 
@@ -272,20 +272,20 @@ UNDO()
 | Masukan dosen UTS | | *(diisi kelompok)* | Bagian 3 panduan mewajibkan tindak lanjut masukan dosen dilaporkan |
 
 ## Lampiran E. Pembagian Kontribusi
-| Tim | Anggota | Tanggung jawab tim | Kontribusi individu |
-|---|---|---|---|
-| Team 1 | Arif | Database, Searching, Katalog Menu | |
-| Team 1 | Mitha | Dokumentasi (laporan IMRAD, slide) | |
-| Team 1 | Sigit | Database, Searching, Katalog Menu | |
-| Team 1 | Reza | Database, Searching, Katalog Menu | |
-| Team 2 | Lucky | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute | |
-| Team 2 | Angelica | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute | |
-| Team 2 | Alvi | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute | |
-| Team 2 | Ryan | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute | |
-| Team 3 | Arbi | Fixing Bug, Ranking & Pengurutan, Dashboard | |
-| Team 3 | Hafiz | Fixing Bug, Ranking & Pengurutan, Dashboard | |
-| Team 3 | Gilang | Fixing Bug, Ranking & Pengurutan, Dashboard | |
+| Tim | Anggota | Tanggung jawab tim |
+|---|---|---|
+| Team 1 | Arif | Database, Searching, Katalog Menu |
+| Team 1 | Mitha | Dokumentasi (laporan IMRAD, slide) |
+| Team 1 | Sigit | Database, Searching, Katalog Menu |
+| Team 1 | Reza | Database, Searching, Katalog Menu |
+| Team 2 | Lucky | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute |
+| Team 2 | Angelica | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute |
+| Team 2 | Alvi | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute |
+| Team 2 | Ryan | Streamlit, Antrean Prioritas Order, Peta Lokasi & Rute |
+| Team 3 | Arbi | Fixing Bug, Ranking & Pengurutan, Dashboard |
+| Team 3 | Hafiz | Fixing Bug, Ranking & Pengurutan, Dashboard |
+| Team 3 | Gilang | Fixing Bug, Ranking & Pengurutan, Dashboard |
 
-Benchmark (Bagian 7), Testing Plan (Bagian 8), dan halaman Visualisasi Struktur, Riwayat & Undo, Benchmark, dan Testing dikerjakan bersama oleh semua tim. Kolom kontribusi individu diisi masing-masing anggota.
+Benchmark (Bagian 7), Testing Plan (Bagian 8), dan halaman Visualisasi Struktur, Riwayat & Undo, Benchmark, dan Testing dikerjakan bersama oleh semua tim.
 
 Penggunaan alat bantu AI dinyatakan di laporan sesuai Bagian 18 panduan.
